@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,18 +34,7 @@ class AnimalServiceV1Test {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         animalService = new AnimalServiceV1(animalRepository, null, null, csvParser, xmlParser, null);
-    }
-
-    @Test
-    public void testUploadWithCSVFile() {
-        // ??
-    }
-
-    @Test
-    public void testUploadWithXMLFile() {
-        // ??
     }
 
     @Test
