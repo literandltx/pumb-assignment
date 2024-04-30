@@ -57,7 +57,7 @@ public class AnimalControllerV1 {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> search(@RequestBody final AnimalSearchSortRequest request) {
-        log.info(String.format("Search method with param: %s, was called", request.toString()));
+        log.info("Search method called with parameters: {}", request);
 
         return ResponseEntity.ok().body(animalServiceV1.search(request));
     }
@@ -81,7 +81,7 @@ public class AnimalControllerV1 {
     public ResponseEntity<?> upload(
             @RequestPart("file") final MultipartFile file
     ) {
-        log.info(String.format("File: %s, was uploaded.", file.getOriginalFilename()));
+        log.info("File {} uploaded.", file.getOriginalFilename());
 
         return animalServiceV1.upload(file);
     }

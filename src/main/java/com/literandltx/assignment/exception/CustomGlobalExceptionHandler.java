@@ -27,7 +27,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 "Unexpected error occurred."
         );
 
-        log.info(String.format("Exception: %s, was handled.", exception.getMessage()));
+        log.info("Exception was handled: {}", exception.getMessage());
 
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }

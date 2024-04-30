@@ -15,6 +15,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AnimalServiceV1 implements AnimalService {
@@ -35,23 +40,17 @@ public class AnimalServiceV1 implements AnimalService {
 
     @Override
     public ResponseEntity<Void> upload(final MultipartFile multipartFile) {
-        if (multipartFile == null) {
-            throw new IllegalArgumentException("File cannot be null");
-        }
-
-        if (multipartFile.isEmpty()) {
-            throw new UnsupportedFileExtensionException("File is empty");
-        }
+        validateFile(multipartFile);
 
         final List<Animal> animals;
-        final File file = FileUtil.toFile(multipartFile); // unsafe
+        final File file = FileUtil.toFile(multipartFile);
 
         if (Objects.requireNonNull(multipartFile.getOriginalFilename()).endsWith(".csv")) {
             animals = csvParser.parseToAnimals(file);
 
             animalRepository.saveAll(animals);
 
-            file.delete(); // log
+            deleteFile(file);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
 
@@ -60,7 +59,7 @@ public class AnimalServiceV1 implements AnimalService {
 
             animalRepository.saveAll(animals);
 
-            file.delete(); // log
+            deleteFile(file);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
 
@@ -87,6 +86,25 @@ public class AnimalServiceV1 implements AnimalService {
                 .toList();
 
         return ResponseEntity.ok().body(responses);
+    }
+
+    private void validateFile(final MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("File cannot be null or empty");
+        }
+
+        final String fileName = file.getOriginalFilename();
+        if (fileName == null || (!fileName.endsWith(".csv") && !fileName.endsWith(".xml"))) {
+            throw new UnsupportedFileExtensionException("Invalid file format. Only .csv and .xml files are supported");
+        }
+    }
+
+    private void deleteFile(final File file) {
+        if (file != null && file.exists()) {
+            if (!file.delete()) {
+                log.info("Cannot delete file {}", file.getAbsolutePath());
+            }
+        }
     }
 
 }
