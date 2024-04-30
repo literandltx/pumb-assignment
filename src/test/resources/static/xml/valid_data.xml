@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<animals>
+    <animal>
+        <name>Milo</name>
+        <type>cat</type>
+        <sex>male</sex>
+        <weight>19</weight>
+        <cost>51</cost>
+    </animal>
+    <animal>
+        <name>Buddy</name>
+        <type>dog</type>
+        <sex>FEMALE</sex>
+        <weight>62</weight>
+        <cost>34</cost>
+    </animal>
+</animals>

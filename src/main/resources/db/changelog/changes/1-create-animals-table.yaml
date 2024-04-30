@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_animals_table
+      author: your_name_here
+      changes:
+        - createTable:
+            tableName: animals
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sex
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: weight
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: INTEGER
+                  constraints:
+                    nullable: false
