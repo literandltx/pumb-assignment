@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -20,70 +17,59 @@ public class AnimalSpecificationBuilder implements SpecificationBuilder<Animal> 
     private static final String FIELD_WEIGHT = "weight";
     private static final String FIELD_COST = "cost";
 
-    private static final String MIN_VALUE_NOTATION = "min";
-    private static final String MAX_VALUE_NOTATION = "max";
-
     private final AnimalSpecificationProvider animalSpecificationProvider;
 
     @Override
     public Specification<Animal> build(
-            final Optional<List<String>> names,
-            final Optional<List<String>> types,
-            final Optional<List<Animal.Sex>> genders,
-            final Optional<List<Animal.Category>> categories,
-            final Optional<List<Integer>> weights,
-            final Optional<List<Integer>> costs
+            final List<String> names,
+            final List<String> types,
+            final List<Animal.Sex> genders,
+            final List<Animal.Category> categories,
+            final List<Integer> weights,
+            final List<Integer> costs
     ) {
         final List<Specification<Animal>> specificationList = new ArrayList<>();
 
-        if (names.isPresent()) {
-            final List<String> list = names.get().stream()
+        if (names != null && !names.isEmpty()) {
+            final List<String> list = names.stream()
                     .map(String::trim)
                     .toList();
 
             specificationList.add(animalSpecificationProvider.getListSpecification(FIELD_NAME, list));
         }
 
-        if (types.isPresent()) {
-            final List<String> list = types.get().stream()
+        if (types != null && !types.isEmpty()) {
+            final List<String> list = types.stream()
                     .map(String::trim)
                     .toList();
 
             specificationList.add(animalSpecificationProvider.getListSpecification(FIELD_TYPE, list));
         }
 
-        if (genders.isPresent()) {
-            final List<String> list = genders.get().stream()
+        if (genders != null && !genders.isEmpty()) {
+            final List<String> list = genders.stream()
                             .map(Animal.Sex::getName)
                             .toList();
 
             specificationList.add(animalSpecificationProvider.getListSpecification(FIELD_GENDER, list));
         }
 
-        if (categories.isPresent()) {
-            final List<String> list = categories.get().stream()
+        if (categories != null && !categories.isEmpty()) {
+            final List<String> list = categories.stream()
                     .map(Animal.Category::getName)
                     .toList();
 
             specificationList.add(animalSpecificationProvider.getListSpecification(FIELD_CATEGORY, list));
         }
 
-        if (weights.isPresent()) {
-            final Map<String, Integer> minMax = getMinMax(weights.get());
-            final Integer min = minMax.get(MIN_VALUE_NOTATION);
-            final Integer max = minMax.get(MAX_VALUE_NOTATION);
-
-            final Specification<Animal> specification = animalSpecificationProvider.getRangeSpecification(FIELD_WEIGHT, min, max);
+        if (weights != null && !weights.isEmpty()) {
+            final Specification<Animal> specification = createRangeSpecification(weights, FIELD_WEIGHT);
 
             specificationList.add(specification);
         }
 
-        if (costs.isPresent()) {
-            final Map<String, Integer> minMax = getMinMax(costs.get());
-            final Integer min = minMax.get(MIN_VALUE_NOTATION);
-            final Integer max = minMax.get(MAX_VALUE_NOTATION);
-
-            final Specification<Animal> specification = animalSpecificationProvider.getRangeSpecification(FIELD_COST, min, max);
+        if (costs != null && !costs.isEmpty()) {
+            final Specification<Animal> specification = createRangeSpecification(costs, FIELD_COST);
 
             specificationList.add(specification);
         }
@@ -95,24 +81,45 @@ public class AnimalSpecificationBuilder implements SpecificationBuilder<Animal> 
         return Specification.allOf(specificationList);
     }
 
-    private Map<String, Integer> getMinMax(final List<Integer> list) {
-        final Map<String, Integer> mapMinMax = new HashMap<>();
+    private Specification<Animal> createRangeSpecification(final List<Integer> list, final String fieldName) {
+        final Integer min = findMin(list);
+        final Integer max = findMax(list);
 
+        if (min < 0 || max < 0) {
+            throw new IllegalArgumentException("Min and max must be greater than zero, but was min: " + min + ", max: " + max);
+        }
+
+        if (min > max) {
+            throw new IllegalArgumentException("Range must be (min, max) or (min), but was (" + min + ", " + max + ").");
+        }
+
+        System.out.println(min + " " + max);
+
+        return animalSpecificationProvider.getRangeSpecification(fieldName, min, max);
+    }
+
+    private Integer findMin(final List<Integer> list) {
         Integer min = 0;
-        Integer max = Integer.MAX_VALUE;
 
         if (list.size() == 1) {
             min = list.getFirst();
         }
 
         if (list.size() == 2) {
-            min = list.get(0);
+            min = list.getFirst();
+        }
+
+        return min;
+    }
+
+    private Integer findMax(final List<Integer> list) {
+        Integer max = Integer.MAX_VALUE;
+
+        if (list.size() == 2) {
             max = list.get(1);
         }
 
-        mapMinMax.put(MIN_VALUE_NOTATION, min);
-        mapMinMax.put(MAX_VALUE_NOTATION, max);
-
-        return mapMinMax;
+        return max;
     }
+
 }

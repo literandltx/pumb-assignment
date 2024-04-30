@@ -70,13 +70,13 @@ public class AnimalServiceV1 implements AnimalService {
     public ResponseEntity<List<AnimalResponse>> search(
             final AnimalSearchSortRequest request
     ) {
-        final Optional<List<String>> names = Optional.ofNullable(request.getNames());
-        final Optional<List<String>> types = Optional.ofNullable(request.getTypes());
-        final Optional<List<Animal.Sex>> genders = Optional.ofNullable(request.getSexes());
-        final Optional<List<Animal.Category>> categories = Optional.ofNullable(request.getCategories());
-        final Optional<List<Integer>> weights = Optional.ofNullable(request.getWeights());
-        final Optional<List<Integer>> costs = Optional.ofNullable(request.getCosts());
-        final Optional<List<AnimalSearchSortRequest.SortOperation>> sortOperations = Optional.ofNullable(request.getSortOperations());
+        final List<String> names = request.getNames();
+        final List<String> types = request.getTypes();
+        final List<Animal.Sex> genders = request.getSexes();
+        final List<Animal.Category> categories = request.getCategories();
+        final List<Integer> weights = request.getWeights();
+        final List<Integer> costs = request.getCosts();
+        final List<AnimalSearchSortRequest.SortOperation> sortOperations = request.getSortOperations();
 
         final List<Order> animalSortingBuild = animalOrderBuilder.build(sortOperations);
         final Specification<Animal> animalFilterSpecificationBuild = animalSpecificationBuilder.build(names, types, genders, categories, weights, costs);
