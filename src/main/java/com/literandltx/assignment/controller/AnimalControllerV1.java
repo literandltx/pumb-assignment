@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,9 @@ public class AnimalControllerV1 {
                     Sort operations array with structure must contain two items: 'field' and 'direction'. \n
                         - 'field' specifies the attribute by which the sorting is to be performed.
                         - 'direction' specifies the order of sorting and must be either 'asc' (ascending) or 'desc' (descending), case insensitive.
-                   \s"""
+                   \s
+                   Support pagination, adding to url ...?page=0&size=10
+                   """
     )
     @ApiResponses(
             value = {
@@ -58,10 +61,13 @@ public class AnimalControllerV1 {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> search(@RequestBody final AnimalSearchSortRequest request) {
+    public ResponseEntity<?> search(
+            @RequestBody final AnimalSearchSortRequest request,
+            final Pageable pageable
+    ) {
         log.info("Search method called with parameters: {}", request);
 
-        return ResponseEntity.ok().body(animalServiceV1.search(request));
+        return ResponseEntity.ok().body(animalServiceV1.search(request, pageable));
     }
 
     @Operation(

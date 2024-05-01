@@ -14,11 +14,9 @@ import lombok.RequiredArgsConstructor;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
@@ -39,7 +37,9 @@ public class AnimalServiceV1 implements AnimalService {
     private final AnimalMapper animalMapper;
 
     @Override
-    public ResponseEntity<Void> upload(final MultipartFile multipartFile) {
+    public ResponseEntity<Void> upload(
+            final MultipartFile multipartFile
+    ) {
         validateFile(multipartFile);
 
         final List<Animal> animals;
@@ -68,7 +68,8 @@ public class AnimalServiceV1 implements AnimalService {
 
     @Override
     public ResponseEntity<List<AnimalResponse>> search(
-            final AnimalSearchSortRequest request
+            final AnimalSearchSortRequest request,
+            final Pageable pageable
     ) {
         final List<String> names = request.getNames();
         final List<String> types = request.getTypes();
@@ -80,8 +81,9 @@ public class AnimalServiceV1 implements AnimalService {
 
         final List<Order> animalSortingBuild = animalOrderBuilder.build(sortOperations);
         final Specification<Animal> animalFilterSpecificationBuild = animalSpecificationBuilder.build(names, types, sexes, categories, weights, costs);
+        final Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(animalSortingBuild));
 
-        final List<AnimalResponse> responses = animalRepository.findAll(animalFilterSpecificationBuild, Sort.by(animalSortingBuild)).stream()
+        final List<AnimalResponse> responses = animalRepository.findAll(animalFilterSpecificationBuild, pageRequest).stream()
                 .map(animalMapper::toDto)
                 .toList();
 

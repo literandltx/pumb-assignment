@@ -18,7 +18,7 @@ mvn spring-boot:run -Dspring.profiles.active=dev
 http://localhost:8080/api/swagger-ui/index.html#/name/search
 
 ## Request example (/api/v1/animals)
-Any of the parameters present may be missing
+Any of the parameters present may be missing. Support pagination, adding to url ```...?page=0&size=10```
 ```json
 {
   "names": [
