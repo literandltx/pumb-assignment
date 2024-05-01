@@ -54,6 +54,7 @@ Any of the parameters present may be missing
   ]
 }
 ```
+To see all animals, send empty json ```{ }``` as request body
 
 ## Input CSV file example
 ```csv
