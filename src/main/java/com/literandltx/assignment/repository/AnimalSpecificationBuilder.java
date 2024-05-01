@@ -93,8 +93,6 @@ public class AnimalSpecificationBuilder implements SpecificationBuilder<Animal> 
             throw new IllegalArgumentException("Range must be (min, max) or (min), but was (" + min + ", " + max + ").");
         }
 
-        System.out.println(min + " " + max);
-
         return animalSpecificationProvider.getRangeSpecification(fieldName, min, max);
     }
 

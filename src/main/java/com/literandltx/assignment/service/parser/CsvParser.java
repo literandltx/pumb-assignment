@@ -20,6 +20,7 @@ public class CsvParser implements Parser {
     private static final int SEX_INDEX = 2;
     private static final int WEIGHT_INDEX = 3;
     private static final int COST_INDEX = 4;
+    private static final int SKIPPED_ROWS = 1;
 
     @Override
     public List<Animal> parseToAnimals(final File file) {
@@ -27,7 +28,7 @@ public class CsvParser implements Parser {
 
         try (final Reader reader = new FileReader(file)) {
             final CSVReader csvReader = new CSVReader(reader);
-            csvReader.skip(1); // skip csv rows title
+            csvReader.skip(SKIPPED_ROWS);
             String[] nextLine;
 
             while ((nextLine = csvReader.readNext()) != null) {
