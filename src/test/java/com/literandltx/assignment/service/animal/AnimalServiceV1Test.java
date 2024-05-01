@@ -49,7 +49,7 @@ class AnimalServiceV1Test {
         );
 
         // Then
-        assertEquals("Invalid multipartFile format. Only .csv and .xml files are supported", exception.getMessage());
+        assertEquals("Invalid file format. Only .csv and .xml files are supported", exception.getMessage());
     }
 
     @Test
@@ -58,23 +58,23 @@ class AnimalServiceV1Test {
         when(multipartFile.isEmpty()).thenReturn(true);
 
         // When
-        UnsupportedFileExtensionException exception = org.junit.jupiter.api.Assertions.assertThrows(UnsupportedFileExtensionException.class,
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> animalService.upload(multipartFile)
         );
 
         // Then
-        assertEquals("File is empty", exception.getMessage());
+        assertEquals("File cannot be null or empty", exception.getMessage());
         }
 
     @Test
     public void testUploadWithNullFile() {
         // When
-        IllegalArgumentException exception = org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> animalService.upload(null)
         );
 
         // Then
-        assertEquals("File cannot be null", exception.getMessage());
+        assertEquals("File cannot be null or empty", exception.getMessage());
     }
 
 }

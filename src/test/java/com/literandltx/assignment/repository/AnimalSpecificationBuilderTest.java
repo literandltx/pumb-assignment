@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 import java.util.Optional;
 
 class AnimalSpecificationBuilderTest {
@@ -25,12 +27,12 @@ class AnimalSpecificationBuilderTest {
     void build_WithEmptyParameters_ShouldReturnEmptySpecification() {
         // Given & When
         Specification<Animal> specification = animalSpecificationBuilder.build(
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty()
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of()
         );
 
         // Then
