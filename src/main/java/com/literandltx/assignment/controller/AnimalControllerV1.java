@@ -29,20 +29,22 @@ public class AnimalControllerV1 {
     @Operation(
             summary = "Search with filtering and sorting.",
             description = """
-                    Names is case sensitive. \n
-                    Types is case sensitive. \n
-                    Sexes is not case sensitive, but only male/female allowed, others will be ignored. \n
-                    Categories is no case sensitive, but only FIRST_CATEGORY/SECOND_CATEGORY/THIRD_CATEGORY/FOURTH_CATEGORY allowed, others will be ignored. \n
-                    
-                    Weight "weight" is have two working regime (only first two param will be parsed): \n
-                        1. (min, max), two parameters
-                        2. (min), one parameter
-                    Cost "costs" is have two working regime (only first two param will be parsed): \n
-                        1. (min, max), two parameters
-                        2. (min), one parameter
-                    
-                    Direction asc/desc only allowed in any case.
-                    """
+                    Names string array, case sensitive. \n
+                    Types string array, case sensitive. \n
+                    Sexes string array, case insensitive, but only male/female allowed, others will be ignored. \n
+                    Categories string array, case insensitive, but only FIRST_CATEGORY/SECOND_CATEGORY/THIRD_CATEGORY/FOURTH_CATEGORY allowed, others will be ignored. \n
+
+                    Weight "weight" is have two working regime (require one or two array elements): \n
+                        - (min, max), two parameters
+                        - (min), one parameter
+                    Cost "costs" is have two working regime (require one or two array elements): \n
+                        - (min, max), two parameters
+                        - (min), one parameter
+                   \s
+                    Sort operations array with structure must contain two items: 'field' and 'direction'. \n
+                        - 'field' specifies the attribute by which the sorting is to be performed.
+                        - 'direction' specifies the order of sorting and must be either 'asc' (ascending) or 'desc' (descending), case insensitive.
+                   \s"""
     )
     @ApiResponses(
             value = {
