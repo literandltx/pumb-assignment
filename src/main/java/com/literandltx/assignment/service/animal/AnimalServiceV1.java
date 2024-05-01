@@ -72,14 +72,14 @@ public class AnimalServiceV1 implements AnimalService {
     ) {
         final List<String> names = request.getNames();
         final List<String> types = request.getTypes();
-        final List<Animal.Sex> genders = request.getSexes();
+        final List<Animal.Sex> sexes = request.getSexes();
         final List<Animal.Category> categories = request.getCategories();
         final List<Integer> weights = request.getWeights();
         final List<Integer> costs = request.getCosts();
         final List<AnimalSearchSortRequest.SortOperation> sortOperations = request.getSortOperations();
 
         final List<Order> animalSortingBuild = animalOrderBuilder.build(sortOperations);
-        final Specification<Animal> animalFilterSpecificationBuild = animalSpecificationBuilder.build(names, types, genders, categories, weights, costs);
+        final Specification<Animal> animalFilterSpecificationBuild = animalSpecificationBuilder.build(names, types, sexes, categories, weights, costs);
 
         final List<AnimalResponse> responses = animalRepository.findAll(animalFilterSpecificationBuild, Sort.by(animalSortingBuild)).stream()
                 .map(animalMapper::toDto)

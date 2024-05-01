@@ -10,7 +10,7 @@ public interface SpecificationBuilder<T> {
     Specification<T> build(
             final List<String> names,
             final List<String> types,
-            final List<Animal.Sex> genders,
+            final List<Animal.Sex> sexes,
             final List<Animal.Category> categories,
             final List<Integer> weights,
             final List<Integer> costs

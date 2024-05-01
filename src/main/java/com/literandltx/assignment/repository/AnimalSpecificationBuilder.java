@@ -12,7 +12,7 @@ import java.util.List;
 public class AnimalSpecificationBuilder implements SpecificationBuilder<Animal> {
     private static final String FIELD_NAME = "name";
     private static final String FIELD_TYPE = "type";
-    private static final String FIELD_GENDER = "gender";
+    private static final String FIELD_SEX = "sex";
     private static final String FIELD_CATEGORY = "category";
     private static final String FIELD_WEIGHT = "weight";
     private static final String FIELD_COST = "cost";
@@ -23,7 +23,7 @@ public class AnimalSpecificationBuilder implements SpecificationBuilder<Animal> 
     public Specification<Animal> build(
             final List<String> names,
             final List<String> types,
-            final List<Animal.Sex> genders,
+            final List<Animal.Sex> sexes,
             final List<Animal.Category> categories,
             final List<Integer> weights,
             final List<Integer> costs
@@ -46,12 +46,12 @@ public class AnimalSpecificationBuilder implements SpecificationBuilder<Animal> 
             specificationList.add(animalSpecificationProvider.getListSpecification(FIELD_TYPE, list));
         }
 
-        if (genders != null && !genders.isEmpty()) {
-            final List<String> list = genders.stream()
+        if (sexes != null && !sexes.isEmpty()) {
+            final List<String> list = sexes.stream()
                             .map(Animal.Sex::getName)
                             .toList();
 
-            specificationList.add(animalSpecificationProvider.getListSpecification(FIELD_GENDER, list));
+            specificationList.add(animalSpecificationProvider.getListSpecification(FIELD_SEX, list));
         }
 
         if (categories != null && !categories.isEmpty()) {

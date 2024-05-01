@@ -66,9 +66,9 @@ public class Animal {
             this.name = name;
         }
 
-        public static Optional<Sex> fromString(final String genderString) {
+        public static Optional<Sex> fromString(final String sexString) {
             for (final Sex sex : Sex.values()) {
-                if (sex.name.equalsIgnoreCase(genderString)) {
+                if (sex.name.equalsIgnoreCase(sexString)) {
                     return Optional.of(sex);
                 }
             }
