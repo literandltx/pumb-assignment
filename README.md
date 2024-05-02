@@ -4,7 +4,7 @@
 2. Start PostgreSQL docker container
 ```
 docker run -d --name postgres-db -p 5432:5432 -e POSTGRES_PASSWORD=password postgres
-2. ```
+```
 3. Build the Application
 ```
 mvn clean package
